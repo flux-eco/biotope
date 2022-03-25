@@ -6,6 +6,28 @@ FROM phpswoole/swoole:latest-alpine as flux-biotope
 
 
 # |-------------------------------------------------------------------------- \
+# | General Environment Variables
+# |-------------------------------------------------------------------------- \
+ENV SWOOLE_HTTP_PORT=80
+ENV SWOOLE_HTTP_WORKER_NUM=1
+ENV SWOOLE_HTTP_MAX_CONN=10000
+ENV SWOOLE_HTTP_MAX_REQUEST=10000
+# SWOOLE_IPC_MSGQUEUE
+ENV SWOOLE_HTTP_IPC_MODE=2
+ENV SWOOLE_HTTP_TASK_WORKER_NUM=1
+# SWOOLE_IPC_MSGQUEUE
+ENV SWOOLE_HTTP_TASK_IPC_MODE=2
+ENV SWOOLE_HTTP_TASK_MAX_REQUEST=5000
+ENV SWOOLE_HTTP_DISPATCH_MODE=1
+ENV SWOOLE_HTTP_DAEMONIZE=0
+ENV SWOOLE_HTTP_BACKLOG=2048
+ENV SWOOLE_HTTP_OPEN_TCP_KEEPALIVE=1
+ENV SWOOLE_HTTP_TCP_DEFER_ACCEPT=5
+ENV SWOOLE_HTTP_OPEN_TCP_NODELAY=1
+ENV SWOOLE_HTTP_LOG_FILE_PATH_NAME="/var/log/swoole/http.log"
+
+
+# |-------------------------------------------------------------------------- \
 # | apk update
 # | Update the index of available packages
 # |
@@ -53,38 +75,6 @@ RUN \
 USER www-data
 
 
-# |-------------------------------------------------------------------------- \
-# | PHP pdo pdo_mysql
-# | mysql clients
-# |-------------------------------------------------------------------------- \
-
-# root access
-USER root
-RUN \
-  # Install
-  docker-php-ext-install pdo pdo_mysql && \
-  # Enable
-  docker-php-ext-enable pdo_mysql
-# Switch back to default user
-USER www-data
-
-
-# |-------------------------------------------------------------------------- \
-# | PHP php8-curl
-# |-------------------------------------------------------------------------- \
-
-# root access
-USER root
-RUN \
-  # Install \
-  apk add curl-dev && \
-  docker-php-ext-install curl && \
-  # Enable
-  docker-php-ext-enable curl
-# Switch back to default user
-USER www-data
-
-
 # |--------------------------------------------------------------------------
 # | PHP gettext | https://www.php.net/manual/de/book.gettext.php
 # |--------------------------------------------------------------------------
@@ -95,7 +85,7 @@ RUN \
     # Install dependencies
     apk --no-cache add gettext-dev && \
     # Install
-    docker-php-ext-install gettext
+    apk --no-cache add -y php-gettext
 # Switch back to default user
 USER www-data
 
@@ -108,7 +98,7 @@ USER root
 RUN \
     apk --no-cache add yaml-dev
 # Download latest known YAML Extension
-ENV YAML_VERSION 2.2.1
+ENV YAML_VERSION 2.2.2
 RUN mkdir -p /usr/src/php/ext/yaml &&\
         curl -L https://github.com/php/pecl-file_formats-yaml/archive/$YAML_VERSION.tar.gz | tar xvz -C /usr/src/php/ext/yaml --strip 1 &&\
         echo 'yaml' >> /usr/src/php-available-exts && \
