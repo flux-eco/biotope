@@ -96,14 +96,7 @@ USER www-data
 
 USER root
 RUN \
-    apk --no-cache add yaml-dev
-# Download latest known YAML Extension
-ENV YAML_VERSION 2.2.2
-RUN mkdir -p /usr/src/php/ext/yaml &&\
-        curl -L https://github.com/php/pecl-file_formats-yaml/archive/$YAML_VERSION.tar.gz | tar xvz -C /usr/src/php/ext/yaml --strip 1 &&\
-        echo 'yaml' >> /usr/src/php-available-exts && \
-    # Install extension
-    docker-php-ext-install yaml
+    apk --no-cache add php-yaml
 # Switch back to default user
 USER www-data
 
