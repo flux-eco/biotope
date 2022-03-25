@@ -85,7 +85,7 @@ RUN \
     # Install dependencies
     apk --no-cache add gettext-dev && \
     # Install
-    apk --no-cache add -y php-gettext
+    apk --no-cache add php-gettext
 # Switch back to default user
 USER www-data
 
