@@ -3,7 +3,7 @@ build:
   before_script:
     - echo -n $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
-    - docker build . --pull --target flux-ecosystem -t $CI_REGISTRY_IMAGE/flux-biotope:latest
+    - docker build . --pull --target flux-biotope -t $CI_REGISTRY_IMAGE/flux-biotope:latest
     - docker push $CI_REGISTRY_IMAGE/flux-biotope:latest
   after_script:
     - docker logout $CI_REGISTRY
