@@ -94,11 +94,11 @@ USER www-data
 # | PHP YAML | https://www.php.net/manual/de/book.yaml.php
 # |--------------------------------------------------------------------------
 
-USER root
-RUN \
-    apk --no-cache add php-yaml
+#USER root
+# RUN \
+#    apk --no-cache add php-yaml
 # Switch back to default user
-USER www-data
+#USER www-data
 
 #www-data persmissions on /var/www
 USER root
