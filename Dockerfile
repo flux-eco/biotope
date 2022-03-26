@@ -94,11 +94,23 @@ USER www-data
 # | PHP YAML | https://www.php.net/manual/de/book.yaml.php
 # |--------------------------------------------------------------------------
 
-#USER root
-# RUN \
-#    apk --no-cache add php-yaml
+# |--------------------------------------------------------------------------
+# | PHP YAML | https://www.php.net/manual/de/book.yaml.php
+# |--------------------------------------------------------------------------
+
+USER root
+RUN \
+    apk --no-cache add yaml-dev
+# Download latest known YAML Extension
+ARG YAML_VERSION=2.2.2
+RUN mkdir -p /usr/src/php/ext/yaml \
+    && curl -L https://github.com/php/pecl-file_formats-yaml/archive/$YAML_VERSION.tar.gz | tar xvz -C /usr/src/php/ext/yaml --strip 1 \
+    && echo 'yaml' >> /usr/src/php-available-exts \
+    # Install extension
+    && docker-php-ext-install yaml
 # Switch back to default user
-#USER www-data
+USER www-data
+
 
 #www-data persmissions on /var/www
 USER root
