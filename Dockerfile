@@ -90,9 +90,21 @@ RUN \
 USER www-data
 
 
-# |--------------------------------------------------------------------------
-# | PHP YAML | https://www.php.net/manual/de/book.yaml.php
-# |--------------------------------------------------------------------------
+# |-------------------------------------------------------------------------- \
+# | PHP pdo pdo_mysql
+# | mysql clients
+# |-------------------------------------------------------------------------- \
+
+# root access
+USER root
+RUN \
+  # Install
+  docker-php-ext-install pdo pdo_mysql && \
+  # Enable
+  docker-php-ext-enable pdo_mysql
+# Switch back to default user
+USER www-data
+
 
 # |--------------------------------------------------------------------------
 # | PHP YAML | https://www.php.net/manual/de/book.yaml.php
