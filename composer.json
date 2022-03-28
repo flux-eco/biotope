@@ -21,15 +21,6 @@
   "support": {
     "email": "support@fluxlabs.ch"
   },
-  "require": {
-
-  },
-  "require-dev": {
-
-  },
-  "autoload": {
-
-  },
   "config": {
     "classmap-authoritative": false,
     "optimize-autoloader": false,
