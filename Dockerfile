@@ -50,11 +50,11 @@ USER www-data
 # |-------------------------------------------------------------------------- \
 
 # root access
-USER root
-RUN \
-    apk add busybox-extras
+#USER root
+#RUN \
+#    apk add busybox-extras
 # Switch back to default user
-USER www-data
+#USER www-data
 
 
 
