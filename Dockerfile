@@ -98,10 +98,7 @@ USER www-data
 # root access
 USER root
 RUN \
-  # Install
-  docker-php-ext-install pdo pdo_mysql && \
-  # Enable
-  docker-php-ext-enable pdo_mysql
+  docker-php-ext-install mysqli pdo_mysql
 # Switch back to default user
 USER www-data
 
