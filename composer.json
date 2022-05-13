@@ -29,5 +29,9 @@
     "allow-plugins": {
       "composer/package-versions-deprecated": false
     }
+  },
+  "require": {
+    "ext-soap": "*",
+    "ext-yaml": "*"
   }
 }
