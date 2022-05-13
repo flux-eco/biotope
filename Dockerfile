@@ -102,6 +102,26 @@ RUN docker-php-ext-enable pdo_mysql
 # Switch back to default user
 USER www-data
 
+# |-------------------------------------------------------------------------- \
+# | PHP soap
+# |-------------------------------------------------------------------------- \
+
+# root access
+USER root
+RUN \
+    apk add \
+    libxml2-dev \
+    php8-soap
+USER www-data
+USER root
+RUN \
+  # Install
+  docker-php-ext-install soap && \
+  # Enable
+  docker-php-ext-enable soap
+# Switch back to default user
+USER www-data
+
 
 # |--------------------------------------------------------------------------
 # | PHP YAML | https://www.php.net/manual/de/book.yaml.php
