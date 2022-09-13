@@ -1,7 +1,7 @@
 *
 !build
 !.gitignore
-!compose.yaml
+!compose.yaml.example
 !LICENSE
 !README.md
 !run.sh
