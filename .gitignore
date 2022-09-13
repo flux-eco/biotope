@@ -1,2 +1,7 @@
-.idea
-vendor/
+*
+!build
+!.gitignore
+!compose.yaml
+!LICENSE
+!README.md
+!run.sh
