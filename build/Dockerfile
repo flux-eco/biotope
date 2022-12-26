@@ -1,4 +1,4 @@
-FROM phpswoole/swoole:latest-alpine as  flux-eco-biotope
+FROM phpswoole/swoole:php8.2-alpine as  flux-eco-biotope
 
 # |-------------------------------------------------------------------------- \
 # | author martin@fluxlabs.ch
