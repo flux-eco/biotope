@@ -1,31 +1,12 @@
 FROM phpswoole/swoole:php8.2-alpine as  flux-eco-biotope
 
-# |-------------------------------------------------------------------------- \
-# | author martin@fluxlabs.ch
-# |-------------------------------------------------------------------------- \
-
-
-# |-------------------------------------------------------------------------- \
-# | General Environment Variables
-# |-------------------------------------------------------------------------- \
-ENV SWOOLE_HTTP_PORT=80
-ENV SWOOLE_HTTP_WORKER_NUM=1
-ENV SWOOLE_HTTP_MAX_CONN=10000
-ENV SWOOLE_HTTP_MAX_REQUEST=10000
-# SWOOLE_IPC_MSGQUEUE
-ENV SWOOLE_HTTP_IPC_MODE=2
-ENV SWOOLE_HTTP_TASK_WORKER_NUM=1
-# SWOOLE_IPC_MSGQUEUE
-ENV SWOOLE_HTTP_TASK_IPC_MODE=2
-ENV SWOOLE_HTTP_TASK_MAX_REQUEST=5000
-ENV SWOOLE_HTTP_DISPATCH_MODE=1
-ENV SWOOLE_HTTP_DAEMONIZE=0
-ENV SWOOLE_HTTP_BACKLOG=2048
-ENV SWOOLE_HTTP_OPEN_TCP_KEEPALIVE=1
-ENV SWOOLE_HTTP_TCP_DEFER_ACCEPT=5
-ENV SWOOLE_HTTP_OPEN_TCP_NODELAY=1
-ENV SWOOLE_HTTP_LOG_FILE_PATH_NAME="/var/log/swoole/http.log"
-
+ENV FLUX_ECO_HTTP_SERVER_SIDECAR_PORT=9501
+ENV FLUX_ECO_HTTP_SERVER_SIDECAR_WORKER_NUM=10
+ENV FLUX_ECO_HTTP_SERVER_SIDECAR_BACKLOG=2048
+ENV FLUX_ECO_HTTP_SERVER_SIDECAR_INDEX_FILES=/index.html
+ENV FLUX_ECO_HTTP_SERVER_SIDECAR_LOG_FILE_PATH_NAME=/var/log/flux-eco-http-server-sidecar/server.log
+ENV FLUX_ECO_HTTP_SERVER_SIDECAR_AUTOLOAD_FILE_PATH=/app/autoload.php
+ENV FLUX_ECO_HTTP_SERVER_SIDECAR_HTTP_API_FQCN=NULL
 
 # |-------------------------------------------------------------------------- \
 # | apk update
@@ -42,20 +23,6 @@ RUN \
     apk upgrade
 # Switch back to default user
 USER www-data
-
-# |-------------------------------------------------------------------------- \
-# | busybox-extras
-# | e.g. telnet
-# |
-# |-------------------------------------------------------------------------- \
-
-# root access
-#USER root
-#RUN \
-#    apk add busybox-extras
-# Switch back to default user
-#USER www-data
-
 
 
 # |-------------------------------------------------------------------------- \
@@ -140,8 +107,18 @@ RUN mkdir -p /usr/src/php/ext/yaml \
 # Switch back to default user
 USER www-data
 
-
-#www-data persmissions on /var/www
+# |--------------------------------------------------------------------------
+# | Create Default Log Directory
+# |--------------------------------------------------------------------------
 USER root
-RUN chown -R www-data:www-data /var/www
+RUN mkdir -p /var/log/flux-eco-http-server-sidecar/
+RUN chown -R www-data:www-data /var/log/flux-eco-http-server-sidecar/
 USER www-data
+
+# |--------------------------------------------------------------------------
+# | COPY flux-eco-http-server-sidecar to /opt/flux-eco-http-server-sidecar
+# |--------------------------------------------------------------------------
+USER root
+COPY --chown=www-data:www-data ./opt/flux-eco-http-server-sidecar /opt/flux-eco-http-server-sidecar
+USER www-data
+WORKDIR /app

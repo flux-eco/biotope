@@ -1,7 +1,8 @@
-*
-!build
+/*
 !.gitignore
-!compose.yaml.example
 !LICENSE
 !README.md
-!run.sh
+!opt/
+opt/*
+!opt/flux-eco-http-server-sidecar
+!docker

@@ -1,3 +1,0 @@
-services:
-  flux-eco-biotope:
-    image: fluxms/flux-eco-biotope:latest
