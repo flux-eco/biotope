@@ -1,0 +1,2 @@
+#!/bin/sh
+php /opt/flux-eco-http-synapse/app/cli/server.php

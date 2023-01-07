@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build  ../ -f Dockerfile --target flux-eco-biotope -t fluxms/flux-eco-biotope:v2022-01-06-1 -t fluxms/flux-eco-biotope:latest
+docker build  ../ -f Dockerfile --target flux-eco-biotope -t fluxms/flux-eco-biotope:v2022-01-07-2

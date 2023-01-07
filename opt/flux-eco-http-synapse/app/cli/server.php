@@ -1,11 +1,11 @@
 <?php
 require_once "EnvName.php";
-require_once EnvName::FLUX_ECO_HTTP_SERVER_SIDECAR_AUTOLOAD_FILE_PATH->toConfigValue();
+require_once EnvName::FLUX_ECO_HTTP_SYNAPSE_AUTOLOAD_FILE_PATH->toConfigValue();
 
-$server = new Swoole\HTTP\Server('0.0.0.0', EnvName::FLUX_ECO_HTTP_SERVER_SIDECAR_PORT->toConfigValue());
+$server = new Swoole\HTTP\Server('0.0.0.0', EnvName::FLUX_ECO_HTTP_SYNAPSE_PORT->toConfigValue());
 $server->set([
-    'worker_num' => EnvName::FLUX_ECO_HTTP_SERVER_SIDECAR_WORKER_NUM->toConfigValue(),      // The number of worker processes to start
-    'backlog' => EnvName::FLUX_ECO_HTTP_SERVER_SIDECAR_BACKLOG->toConfigValue(), // TCP backlog connection number
+    'worker_num' => EnvName::FLUX_ECO_HTTP_SYNAPSE_WORKER_NUM->toConfigValue(),      // The number of worker processes to start
+    'backlog' => EnvName::FLUX_ECO_HTTP_SYNAPSE_BACKLOG->toConfigValue(), // TCP backlog connection number
     'daemonize' => false,
     'dispatch_mode' => 2,
     'task_ipc_mode' => 2
@@ -28,7 +28,7 @@ $server->on("Start", function (Swoole\Http\Server $server) {
 
 // The main HTTP server request callback event, entry point for all incoming HTTP requests
 $server->on('Request', function (Swoole\Http\Request $request, Swoole\Http\Response $response) {
-    $api = call_user_func_array([EnvName::FLUX_ECO_HTTP_SERVER_SIDECAR_HTTP_API_FQCN->toConfigValue(), "new"], []);
+    $api = call_user_func_array([EnvName::FLUX_ECO_HTTP_SYNAPSE_HTTP_API_FQCN->toConfigValue(), "new"], []);
     $api->handleHttpRequest($request, $response);
 });
 

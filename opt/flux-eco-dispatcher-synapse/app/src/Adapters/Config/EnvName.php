@@ -1,0 +1,16 @@
+<?php
+
+namespace FluxEco\MessageDispatcherSidecar\Adapters\Config;
+
+enum EnvName: string
+{
+    case FLUX_ECO_DISPATCHER_SYNAPSE_CONFIG_DIRECTORY_PATH = 'FLUX_ECO_DISPATCHER_SYNAPSE_CONFIG_DIRECTORY_PATH';
+    case FLUX_ECO_DISPATCHER_SYNAPSE_FROM_PROTOCOL = 'FLUX_ECO_DISPATCHER_SYNAPSE_FROM_PROTOCOL';
+    case FLUX_ECO_DISPATCHER_SYNAPSE_FROM_HOST = 'FLUX_ECO_DISPATCHER_SYNAPSE_FROM_HOST';
+    case FLUX_ECO_DISPATCHER_SYNAPSE_FROM_PORT = 'FLUX_ECO_DISPATCHER_SYNAPSE_FROM_PORT';
+
+    public function toConfigValue() : string|int
+    {
+        return getenv($this->value);
+    }
+}

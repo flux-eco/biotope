@@ -1,12 +1,13 @@
 FROM phpswoole/swoole:php8.2-alpine as  flux-eco-biotope
 
-ENV FLUX_ECO_HTTP_SERVER_SIDECAR_PORT=9501
-ENV FLUX_ECO_HTTP_SERVER_SIDECAR_WORKER_NUM=10
-ENV FLUX_ECO_HTTP_SERVER_SIDECAR_BACKLOG=2048
-ENV FLUX_ECO_HTTP_SERVER_SIDECAR_INDEX_FILES=/index.html
-ENV FLUX_ECO_HTTP_SERVER_SIDECAR_LOG_FILE_PATH_NAME=/var/log/flux-eco-http-server-sidecar/server.log
-ENV FLUX_ECO_HTTP_SERVER_SIDECAR_AUTOLOAD_FILE_PATH=/app/autoload.php
-ENV FLUX_ECO_HTTP_SERVER_SIDECAR_HTTP_API_FQCN=NULL
+ENV FLUX_ECO_HTTP_SYNAPSE_PORT=9501
+ENV FLUX_ECO_HTTP_SYNAPSE_WORKER_NUM=10
+ENV FLUX_ECO_HTTP_SYNAPSE_BACKLOG=2048
+ENV FLUX_ECO_HTTP_SYNAPSE_INDEX_FILES=/index.html
+ENV FLUX_ECO_HTTP_SYNAPSE_LOG_FILE_PATH_NAME=/var/log/flux-eco-http-synapse/server.log
+ENV FLUX_ECO_HTTP_SYNAPSE_AUTOLOAD_FILE_PATH=NULL
+ENV FLUX_ECO_HTTP_SYNAPSE_HTTP_API_FQCN=NULL
+ENV FLUX_ECO_DISPATCHER_SYNAPSE_CONFIG_DIRECTORY_PATH=/opt/flux-eco-dispatcher-synapse/config
 
 # |-------------------------------------------------------------------------- \
 # | apk update
@@ -111,14 +112,23 @@ USER www-data
 # | Create Default Log Directory
 # |--------------------------------------------------------------------------
 USER root
-RUN mkdir -p /var/log/flux-eco-http-server-sidecar/
-RUN chown -R www-data:www-data /var/log/flux-eco-http-server-sidecar/
+RUN mkdir -p /var/log/flux-eco-http-synapse/
+RUN chown -R www-data:www-data /var/log/flux-eco-http-synapse/
 USER www-data
 
 # |--------------------------------------------------------------------------
-# | COPY flux-eco-http-server-sidecar to /opt/flux-eco-http-server-sidecar
+# | COPY flux-eco-installer-orbital, flux-eco-http-synapse, flux-eco-dispatcher-synapse
 # |--------------------------------------------------------------------------
 USER root
-COPY --chown=www-data:www-data ./opt/flux-eco-http-server-sidecar /opt/flux-eco-http-server-sidecar
+
+COPY --chown=www-data:www-data ./opt/flux-eco-installer-orbital/app/bin/flux-eco-installer-orbital.extract-archive-url-to-folder /usr/local/bin/flux-eco-installer-orbital.extract-archive-url-to-folder
+RUN chmod a+rx /usr/local/bin/flux-eco-installer-orbital.extract-archive-url-to-folder
+
+COPY --chown=www-data:www-data ./opt/flux-eco-http-synapse/app/bin/flux-eco-http-synapse.start /usr/local/bin/flux-eco-http-synapse.start
+RUN chmod a+rx /usr/local/bin/flux-eco-http-synapse.start
+COPY --chown=www-data:www-data ./opt/flux-eco-http-synapse/app /opt/flux-eco-http-synapse/app
+
+COPY --chown=www-data:www-data ./opt/flux-eco-dispatcher-synapse /opt/flux-eco-dispatcher-synapse
 USER www-data
-WORKDIR /app
+
+WORKDIR /opt
