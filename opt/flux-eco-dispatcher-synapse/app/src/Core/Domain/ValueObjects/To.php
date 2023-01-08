@@ -1,6 +1,6 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Domain\ValueObjects;
+namespace FluxEco\DispatcherSynapse\Core\Domain\ValueObjects;
 
 class To
 {
@@ -20,6 +20,6 @@ class To
 
     public function toUrl() : string
     {
-        return $this->server->toString() . "To.php/" . $this->addressPath;
+        return $this->server->toString() . "/" . $this->addressPath;
     }
 }

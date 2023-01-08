@@ -1,10 +1,11 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Adapters\Api;
+namespace FluxEco\DispatcherSynapse\Adapters\Api;
 
-use FluxEco\MessageDispatcherSidecar\Core\Ports;
-use FluxEco\MessageDispatcherSidecar\Core\Domain\ValueObjects;
-use FluxEco\MessageDispatcherSidecar\Adapters\Config\Config;
+use FluxEco\DispatcherSynapse\Core\Ports;
+use FluxEco\DispatcherSynapse\Adapters\Config\Config;
+use FluxEco\DispatcherSynapse\Adapters\Publisher\HttpMessagePublisher;
+use Exception;
 
 final readonly class Api
 {
@@ -19,18 +20,21 @@ final readonly class Api
         return new self(Ports\Service::new(
             Ports\Outbounds::new(
                 $config->configDirectoryPath,
-                ValueObjects\Server::new(
-                    $config->fromProtocol,
-                    $config->fromHost,
-                    $config->fromPort
-                ),
-
+                $config->fromOrbital,
+                $config->messageStreamOrbital,
+                HttpMessagePublisher::new()
             )
         ));
     }
 
-    public function dispatch(string $address, object $message) : void
+    /**
+     * @throws Exception
+     */
+    public function dispatch(string $addressPath, object $message) : void
     {
-
+        $config = Config::new();
+        $this->service->dispatchMessage(Ports\IncomingMessages\DispatchMessage::new(
+            $addressPath, $message
+        ));
     }
 }

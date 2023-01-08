@@ -1,6 +1,6 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Domain\ValueObjects;
+namespace FluxEco\DispatcherSynapse\Core\Domain\ValueObjects;
 
 use Exception;
 
@@ -24,6 +24,6 @@ final readonly class From
 
     public function toHeader() : string
     {
-        return 'x-flux-eco-orbital: ' . $this->server->toString();
+        return 'x-flux-eco-orbital:' . $this->server->toString();
     }
 }

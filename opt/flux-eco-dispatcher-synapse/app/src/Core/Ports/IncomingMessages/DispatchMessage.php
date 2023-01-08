@@ -1,12 +1,11 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Ports\IncomingMessages;
-use FluxEco\MessageDispatcherSidecar\Core\Domain\ValueObjects;
+namespace FluxEco\DispatcherSynapse\Core\Ports\IncomingMessages;
+use FluxEco\DispatcherSynapse\Core\Domain\ValueObjects;
 
 final readonly class DispatchMessage
 {
     private function __construct(
-        public ValueObjects\From $from,
         public string $addressPath,
         public object $message
     ) {
@@ -14,7 +13,6 @@ final readonly class DispatchMessage
     }
 
     public static function new(
-        ValueObjects\From $from,
         string $addressPath,
         object $message
     ) : self {

@@ -1,6 +1,6 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Domain\ValueObjects;
+namespace FluxEco\DispatcherSynapse\Core\Domain\ValueObjects;
 
 use Exception;
 
@@ -18,11 +18,16 @@ final readonly class CorrelationId
      */
     public static function newUuid4() : self
     {
-        $idType = IdType::UUID4;
+        $idType = IdType::CORRELATION_ID;
 
         return new self(
             $idType->generateId(),
             $idType
         );
+    }
+
+    public function toHeader() : string
+    {
+        return 'x-flux-eco-'.$this->idType->value.': ' . $this->id;
     }
 }

@@ -1,16 +1,16 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Ports;
+namespace FluxEco\DispatcherSynapse\Core\Ports;
 
-use FluxEco\MessageDispatcherSidecar\Core\Domain\ValueObjects;
+use FluxEco\DispatcherSynapse\Core\Domain\ValueObjects;
 
 final readonly class Outbounds {
 
     private function __construct(
         public string $dispatcherConfigPath,
-        public ValueObjects\Server $messageStreamServer,
+        public ValueObjects\Server $fromOrbital,
+        public ValueObjects\Server $messageStreamOrbital,
         public Publisher\MessagePublisher $messagePublisher,
-
     )
     {
 
@@ -18,7 +18,8 @@ final readonly class Outbounds {
 
     public static function new(
         string $dispatcherConfigPath,
-        ValueObjects\Server $messageStreamServer,
+        ValueObjects\Server $fromOrbital,
+        ValueObjects\Server $messageStreamOrbital,
         Publisher\MessagePublisher $messagePublisher
     ) {
         return new self(...get_defined_vars());

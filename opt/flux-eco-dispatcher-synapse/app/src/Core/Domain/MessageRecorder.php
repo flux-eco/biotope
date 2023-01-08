@@ -1,6 +1,6 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Domain;
+namespace FluxEco\DispatcherSynapse\Core\Domain;
 
 use stdClass;
 

@@ -1,11 +1,14 @@
 <?php
 require_once "EnvName.php";
+
 require_once EnvName::FLUX_ECO_HTTP_SYNAPSE_AUTOLOAD_FILE_PATH->toConfigValue();
 
 $server = new Swoole\HTTP\Server('0.0.0.0', EnvName::FLUX_ECO_HTTP_SYNAPSE_PORT->toConfigValue());
 $server->set([
-    'worker_num' => EnvName::FLUX_ECO_HTTP_SYNAPSE_WORKER_NUM->toConfigValue(),      // The number of worker processes to start
-    'backlog' => EnvName::FLUX_ECO_HTTP_SYNAPSE_BACKLOG->toConfigValue(), // TCP backlog connection number
+    'worker_num' => EnvName::FLUX_ECO_HTTP_SYNAPSE_WORKER_NUM->toConfigValue(),
+    // The number of worker processes to start
+    'backlog' => EnvName::FLUX_ECO_HTTP_SYNAPSE_BACKLOG->toConfigValue(),
+    // TCP backlog connection number
     'daemonize' => false,
     'dispatch_mode' => 2,
     'task_ipc_mode' => 2

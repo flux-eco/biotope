@@ -1,8 +1,8 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Ports;
+namespace FluxEco\DispatcherSynapse\Core\Ports;
 
-use FluxEco\MessageDispatcherSidecar\Core\Domain;
+use FluxEco\DispatcherSynapse\Core\Domain;
 use Exception;
 use stdClass;
 
@@ -29,26 +29,28 @@ final readonly class Service
         );
 
         //publish to global message stream  e.g. for logging
-        $messagePublisherAggregate->publish(Domain\ValueObjects\MessageId::newUuid4(), $message->from,
-            Domain\ValueObjects\To::new($message->addressPath, $this->outbounds->messageStreamServer), $message);
+        $messagePublisherAggregate->publish(Domain\ValueObjects\MessageId::newUuid4(),
+            Domain\ValueObjects\From::new($this->outbounds->fromOrbital),
+            Domain\ValueObjects\To::new($message->addressPath, $this->outbounds->messageStreamOrbital), $message->message);
 
         $nextMessages = $this->getNexMessages($message);
-        if ($nextMessages === null) {
+        if (count($nextMessages) === 0) {
             $this->publishMessages($messagePublisherAggregate->messageRecorder);
             return;
         }
 
         foreach ($nextMessages as $nextMessage) {
             //publish to global message stream  e.g. for logging
-            $messagePublisherAggregate->publish(Domain\ValueObjects\MessageId::newUuid4(), $message->from,
-                Domain\ValueObjects\To::new($nextMessage->to->addressPath, $this->outbounds->messageStreamServer),
-                $nextMessage);
+            $messagePublisherAggregate->publish(Domain\ValueObjects\MessageId::newUuid4(),
+                Domain\ValueObjects\From::new($this->outbounds->fromOrbital),
+                Domain\ValueObjects\To::new($nextMessage->to->addressPath, $this->outbounds->messageStreamOrbital),$nextMessage);
 
             //publish transformed next message
-            $messagePublisherAggregate->publish(Domain\ValueObjects\MessageId::newUuid4(), $message->from,
-                $nextMessage->to, $nextMessage);
+            $messagePublisherAggregate->publish(Domain\ValueObjects\MessageId::newUuid4(),
+                Domain\ValueObjects\From::new($this->outbounds->fromOrbital), $nextMessage->to, $nextMessage->message);
         }
 
+        $this->publishMessages($messagePublisherAggregate->messageRecorder);
     }
 
     private function publishMessages(Domain\MessageRecorder $messageRecorder) : void
@@ -66,16 +68,17 @@ final readonly class Service
      * @return ?IncomingMessages\DispatchNextMessage[]
      */
     //todo -> refactor
-    private function getNexMessages(IncomingMessages\DispatchMessage $message) : ?array
+    private function getNexMessages(IncomingMessages\DispatchMessage $message) : array
     {
         $filePath = $this->outbounds->dispatcherConfigPath . "/" . $message->addressPath . ".json";
-        if ($this->fileExists($filePath) === false) {
-            return null;
+        if (file_exists($filePath) === false) {
+            return [];
         }
         $messageConfig = json_decode(file_get_contents($filePath));
 
         $nextMessages = [];
         if (property_exists($messageConfig, "nextMessages")) {
+
             foreach ($messageConfig->nextMessages as $nextMessage) {
 
                 if (property_exists($nextMessage, 'required') === true) {
@@ -107,7 +110,7 @@ final readonly class Service
                     if (str_contains($messagePayload->{'$merge'}, '{$message}') === true) {
                         unset($messagePayload->{'$merge'});
                         $messagePayload = (object) array_merge(
-                            (array) $messagePayload, (array) $message);
+                            (array) $messagePayload, (array) $message->message);
                     }
                 }
 
@@ -123,19 +126,19 @@ final readonly class Service
                     foreach ($properties as $propertyKey => $propertyValue) {
                         if (str_contains($propertyValue, '{$message.') === true) {
                             $messagePropertyKey = rtrim(ltrim($propertyValue, '{$message.'), '}');
-                            $propertyValue = $message->{$messagePropertyKey};
+                            $propertyValue = $message->message->{$messagePropertyKey};
                         }
                         $messagePayload->{$propertyKey} = $propertyValue;
                     }
                 }
 
                 $nextMessages[] = IncomingMessages\DispatchNextMessage::new(
-                    $message->from,
+                    Domain\ValueObjects\From::new($this->outbounds->fromOrbital),
                     Domain\ValueObjects\To::new(
                         $addressPath,
                         Domain\ValueObjects\Server::new(
                             $nextMessage->address->server->protocol,
-                            $nextMessage->address->server->url,
+                            $nextMessage->address->server->host,
                             $nextMessage->address->server->port,
                         )
                     ),
@@ -156,18 +159,13 @@ final readonly class Service
         if (str_contains($parameter->location, '{$message}') === true) {
             $location = ltrim($parameter->location, '{$message}');
             $messageAttributePath = explode('/', $location);
-            $value = $message;
+            $value = $message->message;
             foreach ($messageAttributePath as $attributeName) {
                 $value = $value->{$attributeName};
             }
             $address = str_replace('{' . $parameterName . '}', $value, $address);
         }
         return $address;
-    }
-
-    private function fileExists(string $url) : bool
-    {
-        return str_contains(get_headers($url)[0], "200 OK");
     }
 
 }

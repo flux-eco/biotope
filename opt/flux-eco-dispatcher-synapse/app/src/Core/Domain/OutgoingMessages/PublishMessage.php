@@ -1,8 +1,8 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Domain\OutgoingMessages;
+namespace FluxEco\DispatcherSynapse\Core\Domain\OutgoingMessages;
 
-use  FluxEco\MessageDispatcherSidecar\Core\Domain\ValueObjects;
+use  FluxEco\DispatcherSynapse\Core\Domain\ValueObjects;
 
 final readonly class PublishMessage
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Domain\ValueObjects;
+namespace FluxEco\DispatcherSynapse\Core\Domain\ValueObjects;
 
 use Exception;
 
@@ -15,7 +15,7 @@ final readonly class MessageId
 
     public static function newUuid4() : self
     {
-        $idType = IdType::UUID4;
+        $idType = IdType::MESSAGE_ID;
 
         return new self(
             $idType->generateId(),

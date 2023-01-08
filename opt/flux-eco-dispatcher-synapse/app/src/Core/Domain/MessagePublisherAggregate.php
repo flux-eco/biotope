@@ -1,7 +1,7 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Domain;
-use FluxEco\MessageDispatcherSidecar\Core\Domain\OutgoingMessages\PublishMessage;
+namespace FluxEco\DispatcherSynapse\Core\Domain;
+use FluxEco\DispatcherSynapse\Core\Domain\OutgoingMessages\PublishMessage;
 
 final readonly class MessagePublisherAggregate
 {

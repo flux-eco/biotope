@@ -1,12 +1,13 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Domain\ValueObjects;
+namespace FluxEco\DispatcherSynapse\Core\Domain\ValueObjects;
 
 use Exception;
 
 enum IdType: string
 {
-    case UUID4 = "uuid4";
+    case MESSAGE_ID = "message-id";
+    case CORRELATION_ID = "correlation-id";
 
     /**
      * @throws Exception
@@ -14,7 +15,7 @@ enum IdType: string
     public function generateId() : string
     {
         return match ($this) {
-            self::UUID4 => $this->generateUuid4()
+            self::MESSAGE_ID, self::CORRELATION_ID => $this->generateUuid4()
         };
     }
 

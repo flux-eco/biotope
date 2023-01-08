@@ -7,7 +7,15 @@ ENV FLUX_ECO_HTTP_SYNAPSE_INDEX_FILES=/index.html
 ENV FLUX_ECO_HTTP_SYNAPSE_LOG_FILE_PATH_NAME=/var/log/flux-eco-http-synapse/server.log
 ENV FLUX_ECO_HTTP_SYNAPSE_AUTOLOAD_FILE_PATH=NULL
 ENV FLUX_ECO_HTTP_SYNAPSE_HTTP_API_FQCN=NULL
+
+ENV FLUX_ECO_MESSAGE_STREAM_ORBITAL_PROTOCOL=http
+ENV FLUX_ECO_MESSAGE_STREAM_ORBITAL_HOST=flux-eco-message-logger-orbital
+ENV FLUX_ECO_MESSAGE_STREAM_ORBITAL_PORT=9501
+
 ENV FLUX_ECO_DISPATCHER_SYNAPSE_CONFIG_DIRECTORY_PATH=/opt/flux-eco-dispatcher-synapse/config
+ENV FLUX_ECO_DISPATCHER_SYNAPSE_FROM_PROTOCOL=http
+ENV FLUX_ECO_DISPATCHER_SYNAPSE_FROM_HOST=NULL
+ENV FLUX_ECO_DISPATCHER_SYNAPSE_FROM_PORT=9501
 
 # |-------------------------------------------------------------------------- \
 # | apk update
@@ -129,6 +137,10 @@ RUN chmod a+rx /usr/local/bin/flux-eco-http-synapse.start
 COPY --chown=www-data:www-data ./opt/flux-eco-http-synapse/app /opt/flux-eco-http-synapse/app
 
 COPY --chown=www-data:www-data ./opt/flux-eco-dispatcher-synapse /opt/flux-eco-dispatcher-synapse
+
+RUN mkdir -p FLUX_ECO_DISPATCHER_SYNAPSE_CONFIG_DIRECTORY_PATH
+RUN chown -R www-data:www-data FLUX_ECO_DISPATCHER_SYNAPSE_CONFIG_DIRECTORY_PATH
+
 USER www-data
 
 WORKDIR /opt

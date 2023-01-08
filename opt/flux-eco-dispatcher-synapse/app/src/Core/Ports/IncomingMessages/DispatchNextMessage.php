@@ -1,7 +1,7 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Core\Ports\IncomingMessages;
-use FluxEco\MessageDispatcherSidecar\Core\Domain\ValueObjects;
+namespace FluxEco\DispatcherSynapse\Core\Ports\IncomingMessages;
+use FluxEco\DispatcherSynapse\Core\Domain\ValueObjects;
 
 final readonly class DispatchNextMessage
 {

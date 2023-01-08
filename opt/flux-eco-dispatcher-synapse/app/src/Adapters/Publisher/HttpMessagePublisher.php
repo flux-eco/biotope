@@ -1,9 +1,9 @@
 <?php
 
-namespace FluxEco\MessageDispatcherSidecar\Adapters\Publisher;
+namespace FluxEco\DispatcherSynapse\Adapters\Publisher;
 
-use FluxEco\MessageDispatcherSidecar\Core\Ports;
-use FluxEco\MessageDispatcherSidecar\Core\Domain;
+use FluxEco\DispatcherSynapse\Core\Ports;
+use FluxEco\DispatcherSynapse\Core\Domain;
 
 final readonly class HttpMessagePublisher implements Ports\Publisher\MessagePublisher
 {
@@ -22,7 +22,7 @@ final readonly class HttpMessagePublisher implements Ports\Publisher\MessagePubl
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $message->address->toUrl());
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $message->from->toHeader()]);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $message->from->toHeader(), $message->correlationId->toHeader()]);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message->messagePayload));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_exec($ch);
