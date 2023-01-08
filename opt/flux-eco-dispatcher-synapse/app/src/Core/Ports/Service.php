@@ -116,7 +116,7 @@ final readonly class Service
 
                 if (property_exists($messagePayload, '$location') === true) {
                     if (str_contains($messagePayload->{'$location'}, '{$message}') === true) {
-                        $messagePayload = $message;
+                        $messagePayload = $message->message;
                     }
                 }
 
