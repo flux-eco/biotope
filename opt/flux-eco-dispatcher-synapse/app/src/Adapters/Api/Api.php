@@ -32,7 +32,6 @@ final readonly class Api
      */
     public function dispatch(string $addressPath, object $message) : void
     {
-        $config = Config::new();
         $this->service->dispatchMessage(Ports\IncomingMessages\DispatchMessage::new(
             $addressPath, $message
         ));

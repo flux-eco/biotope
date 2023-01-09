@@ -43,7 +43,7 @@ final readonly class Service
             //publish to global message stream  e.g. for logging
             $messagePublisherAggregate->publish(Domain\ValueObjects\MessageId::newUuid4(),
                 Domain\ValueObjects\From::new($this->outbounds->fromOrbital),
-                Domain\ValueObjects\To::new($nextMessage->to->addressPath, $this->outbounds->messageStreamOrbital),$nextMessage);
+                Domain\ValueObjects\To::new($nextMessage->to->addressPath, $this->outbounds->messageStreamOrbital),$nextMessage->message);
 
             //publish transformed next message
             $messagePublisherAggregate->publish(Domain\ValueObjects\MessageId::newUuid4(),

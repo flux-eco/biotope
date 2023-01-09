@@ -1,6 +1,8 @@
 <?php
-require_once "EnvName.php";
+use Swoole\Runtime;
+Runtime::enableCoroutine(Runtime::enableCoroutine(SWOOLE_HOOK_NATIVE_CURL));
 
+require_once "EnvName.php";
 require_once EnvName::FLUX_ECO_HTTP_SYNAPSE_AUTOLOAD_FILE_PATH->toConfigValue();
 
 $server = new Swoole\HTTP\Server('0.0.0.0', EnvName::FLUX_ECO_HTTP_SYNAPSE_PORT->toConfigValue());
