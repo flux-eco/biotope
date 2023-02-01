@@ -7,4 +7,6 @@ opt/*
 !opt/flux-eco-http-synapse
 !opt/flux-eco-dispatcher-synapse
 !opt/flux-eco-installer-orbital
+!opt/flux-eco-php-synapse
+!opt/flux-eco-http-client
 !docker

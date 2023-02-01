@@ -1,0 +1,87 @@
+{
+  "$id": "flux-eco-ilias-user-orbital.json",
+  "name": "flux-eco-ilias-user-orbital",
+  "version": "2023-01-27-1",
+  "technology": "php",
+  "bindings": {
+    "http": {
+      "server": {
+      }
+    },
+    "cli": {
+    },
+    "phpApi": {
+      "fqcn": "FluxEco\\System\\Adapters\\Api\\Api"
+    }
+  },
+  "operations": {
+    "receives": {
+      "importFromCsv": {
+        "payload": {
+          "filePath": {
+            "$ref": "#/schemas/filePath"
+          }
+        }
+      }
+    },
+    "requests": {
+      "getUser": {
+        "payload": {
+          "userId": "#/schemas/userId"
+        },
+        "returns": {
+          "$ref": "#/schemas/user"
+        }
+      }
+    }
+  },
+  "channels": {
+    "receives": {
+      "importFromCsv": {
+        "address": {
+          "path": "flux-eco-ilias-user-orbital/importFromCsv",
+          "parameters": {
+            "filePath": {
+              "$ref": "#/schemas/filePath"
+            }
+          }
+        },
+        "mappings": {
+          "cli": {
+            "payload": {
+              "filePath": "$parameters#/filePath"
+            }
+          }
+        }
+      }
+    },
+    "requests": {
+      "getUser": {
+        "receiver": {
+          "$ref": "flux-ilias-rest-api.json#/channels/receives/getUserById"
+        },
+        "mappings": {
+          "http": {
+            "parameters": {
+              "by-id": "$payload#/userId/id"
+            },
+            "returns": {
+              "todo": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "schemas": {
+    "filePath": {
+      "type": "string"
+    },
+    "userId": {
+      "type": "object"
+    },
+    "user": {
+      "type": "object"
+    }
+  }
+}

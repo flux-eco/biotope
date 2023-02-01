@@ -1,0 +1,75 @@
+{
+  "$id": "flux-ilias-rest-api.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "flux-ilias-rest-api",
+  "version": "2023-01-27-1",
+  "technology": "php",
+  "servers": {
+    "http": {
+      "$ref": "flux-ilias-rest-api-config.json#/servers/http"
+    }
+  },
+  "channels": {
+    "receives": {
+      "getUserById": {
+        "address": {
+          "path": "flux-ilias-rest-api/getUserById",
+          "parameters": {
+            "by-id": {
+              "type": "int"
+            }
+          }
+        },
+        "bindings": {
+          "http": {
+            "server": {
+              "$ref": "#/servers/http"
+            },
+            "method": "GET",
+            "query": null,
+            "requestMessage": {
+              "headers": {
+                "$ref": "#/schemas/httpRequestMessageHeader"
+              }
+            },
+            "responseMessages": {
+              "200": {
+                "content": {
+                  "$ref": "#/schemas/objectIdDto"
+                }
+              },
+              "404": {
+                "headers": {
+                  "contentType": "text/plain"
+                },
+                "content": "Not found"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "values": {
+    "defaultHttpRequestMessageHeader": {
+      "contentType": "application/json",
+      "accept": "application/json",
+      "user-agent": "flux-ilias-api"
+    }
+  },
+  "schemas": {
+    "httpRequestMessageHeader": {
+      "default": "#/values/defaultHttpRequestMessageHeader",
+      "type": "object",
+      "required": [
+        "contentType",
+        "accept",
+        "user-agent"
+      ]
+    },
+    "objectIdDto": {
+    },
+    "userDto": {
+    }
+  }
+}

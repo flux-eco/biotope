@@ -1,0 +1,16 @@
+{
+  "$id": "flux-ilias-rest-api-config.json",
+  "name": "flux-ilias-rest-api-config",
+  "servers": {
+    "http": {
+      "protocol": "http",
+      "port": "80",
+      "host": "nginx",
+      "authentication": {
+        "http": {
+          "basic": "$secrets#/flux-ilias-rest-api/authentication/http/basic"
+        }
+      }
+    }
+  }
+}

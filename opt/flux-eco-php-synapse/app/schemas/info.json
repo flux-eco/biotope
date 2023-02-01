@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema#",
+  "$id": "./info.json",
+  "type": "object",
+  "description": "General information about the Application.",
+  "required": [
+    "$id",
+    "version",
+    "technology"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$id": {
+      "type": "string",
+      "description": "A unique ID for the definition document"
+    },
+    "version": {
+      "type": "string",
+      "format": "date",
+      "example": "2023-01-28-1",
+      "description": "The date of publishing the last version of the application, suffixed with a sequence number per day"
+    },
+    "technology": {
+      "type": "string",
+      "enum": [
+        "php",
+        "mjs",
+        "bash"
+      ]
+    }
+  }
+}
